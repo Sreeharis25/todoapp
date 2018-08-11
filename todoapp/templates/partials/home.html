@@ -1,0 +1,97 @@
+<style>
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 40%;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container {
+    padding: 2px 16px;
+}
+</style>
+<div class="row">
+<div class="col-md-8">
+    <h3>Todo list</h3>
+    <button ng-click="addtodo()">Add</button>
+  <div>
+  	<div>
+
+  		<input type="text" ng-model="search_title" ng-change="searchTask()" name="">
+
+  	</div>
+  	<!-- <table>
+  		<tr ng-repeat="task in task_data ">
+  			<td>{[{task.title}]}</td>
+  			<td>{[{task.description}]}</td>
+  			<td>{[{task.due_date}]}</td>
+  		</tr>
+  	</table> -->
+  		<div class="card" ng-show="add">
+  <div  class="container">
+  	<input ng-model="title" type="text" name=""><br><br>
+  	<input ng-model="description"  type="text" name=""><br><br>
+  	<input ng-model="due_date"  type="date" name=""><br><br>
+  	<button ng-click="savetodo()">Save</button>
+  </div>
+</div>
+  	<div  class="card" ng-repeat="task in task_data " style="" >
+	  <div ng-hide="taskid==task.id" class="container">
+	  	<button ng-click="delete(task)">Delete</button>
+	  	<button ng-click="taskid=task.id">Edit</button>
+	    <h4><b>{[{task.title}]}</b></h4> 
+	    <p>{[{task.description}]}</p> 
+	    <p>{[{task.due_date}]}</p>
+	    <p>{[{task.status}]}</p>
+	    <div class="col-md-9">
+	    	<button ng-click="addSubtask()">Add Subtask</button>
+	    	<div class="card" ng-show="addsub" >
+			  	<input ng-model="subdescription"  type="text" name=""><br><br>
+			  	<button ng-click="saveaddsub(task,subdescription)">Save</button>
+	    	</div>
+		    <div  class="card" ng-repeat="sub_task in task.sub_tasks " style="height: 7.5em;padding: 1em" >
+		    	<div ng-hide="subtaskid==sub_task.id">
+		    		<button style="float: right;" ng-click="subtaskid=sub_task.id">Edit</button>
+		    		<button style="float: right;" ng-click="deleteSub(sub_task)">Delete</button>
+		    	<p><b>{[{sub_task.description}]}</b></p> 
+			    <p>{[{sub_task.status}]}</p>
+			</div>
+			<br>
+			<div ng-show="subtaskid==sub_task.id">
+				<input ng-model="sub_task.description"  type="text" name=""><br><br>
+				<input type="radio" value="completed" ng-model="sub_task.status" name="sub_status">Completed<br>
+				<input type="radio" value="pendig" ng-model="sub_task.status" name="sub_status">Pending<br>
+			  	<button ng-click="saveeditedsub(sub_task)">Save</button>
+			</div>
+		    </div>
+		</div>
+	  </div>
+	  <div ng-show="taskid==task.id" class="container">
+	  	<input ng-model="task.title" type="text" name=""><br><br>
+	  	<input ng-model="task.description"  type="text" name=""><br><br>
+	  	<input ng-model="task.due_date"  type="date" name=""><br><br>
+	  	<select ng-model="task.status">
+	  		<option value="completed">Completed</option>
+	  		<option value="pendig">Pending</option>
+	  	</select>
+	  	<button ng-click="saveeditedtodo(task)">Save</button>
+	  </div>
+</div>
+
+
+  </div>
+
+</div>
+<div class="col-md-4">
+	<p>Alerts</p>
+	<div  class="card" ng-repeat="task in task_alert_data " style="padding: 1em;" >
+		<h4><b>{[{task.title}]}</b></h4> 
+	    <p>{[{task.description}]}</p> 
+	    <p>{[{task.due_date}]}</p>
+	    <p>{[{task.status}]}</p>
+	</div>
+</div>
+</div>
