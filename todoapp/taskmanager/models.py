@@ -17,7 +17,7 @@ class Task(models.Model):
 	due_date = models.DateField(default='')
 	status = models.CharField(
 		max_length=20, default='', choices=STATUS_TYPE_CHOICES)
-	alert_hour = models.PositiveIntegerField(default=0, null=True, blank=True)
+	alert_hour = models.PositiveIntegerField(default=12, null=True, blank=True)
 
 	def __unicode__(self):
 		"""For representing the object in unicode."""

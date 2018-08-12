@@ -44,6 +44,7 @@
 	    <p>{[{task.description}]}</p> 
 	    <p>{[{task.due_date}]}</p>
 	    <p>{[{task.status}]}</p>
+	    <p>Alert before hours: {[{task.alert_hour}]}</p>
 	    <div class="col-md-9">
 	    	<button ng-click="addSubtask()">Add Subtask</button>
 	    	<div class="card" ng-show="addsub" >
@@ -71,11 +72,12 @@
 	  	<input ng-model="task.title" type="text" name=""><br><br>
 	  	<input ng-model="task.description"  type="text" name=""><br><br>
 	  	<input ng-model="task.due_date"  type="date" name=""><br><br>
+	  	<input ng-model="task.alert_hour"  type="number" name="" placeholder="Enter hours to get alert"><br><br>
 	  	<select ng-model="task.status">
 	  		<option value="completed">Completed</option>
 	  		<option value="pendig">Pending</option>
 	  	</select>
-	  	<button ng-click="editTask(task)">Save</button>
+	  	<button ng-click="editTask(task)">Save Task</button>
 	  </div>
 </div>
 
@@ -90,6 +92,7 @@
 	    <p>{[{task.description}]}</p> 
 	    <p>{[{task.due_date}]}</p>
 	    <p>{[{task.status}]}</p>
+	    <p>Alert before hours: {[{task.alert_hour}]}</p>
 	</div>
 </div>
 </div>

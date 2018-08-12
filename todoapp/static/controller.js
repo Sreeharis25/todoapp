@@ -87,6 +87,7 @@
     $scope.description="";
     $scope.due_date="";
     $scope.taskid = 0;
+    $scope.alert_hour=0;
     $scope.subtaskid=0;
     $scope.search_title='';
     $scope.loadTasks = function() {
