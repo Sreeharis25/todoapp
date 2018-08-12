@@ -1,4 +1,4 @@
-"""Apis using tastypie."""
+"""Apis using tastypie for task manager app.."""
 from django.contrib.auth.models import User
 from django.conf.urls import url
 from django.http import HttpResponse
@@ -33,7 +33,7 @@ from .models import Task, SubTask
 
 
 class UserResource(ModelResource):
-    """Resources for user."""
+    """User resource class."""
 
     class Meta:
         """Meta class."""
@@ -46,7 +46,7 @@ class UserResource(ModelResource):
         serializer = Serializer(formats=['json', ])
 
     def prepend_urls(self):
-        """Override urls for login signup and logout."""
+        """Override urls for user login, signup and logout."""
         return [
         	url(r"^(?P<resource_name>%s)/signup%s$" %
                 (self._meta.resource_name, trailing_slash()),
@@ -60,7 +60,18 @@ class UserResource(ModelResource):
         ]
 
     def signup(self, request, **kwargs):
-        """For user signup."""
+        """For user signup.
+
+        Input params:
+            username(str): Username of the user.
+            password(password): password for the user.
+            first_name(str): First for the user.
+            email(email): Email id of the user
+        Response:
+            data(json): dictionary with,
+                success: bool value showing success msg.
+                user: User resource uri.
+        """
     	self.method_check(request, allowed=['post'])
 
         request_dict = {}
@@ -82,7 +93,16 @@ class UserResource(ModelResource):
 	    	
 
     def login(self, request, **kwargs):
-        """For user login."""
+        """For user login.
+
+        Input params:
+            username(str): Username of the user.
+            password(password): password of the user.
+        Response:
+            data(json): dictionary with,
+                success: bool value showing success msg.
+                user: User resource uri.
+        """
         self.method_check(request, allowed=['post'])
 
         request_dict = {}
@@ -103,7 +123,13 @@ class UserResource(ModelResource):
         return data
 
     def logout(self, request, **kwargs):
-        """For logout."""
+        """For logout.
+        
+        Input:
+            request
+        Response:
+            success
+        """
         self.method_check(request, allowed=['get'])
 
         user_dict = {}
@@ -119,9 +145,11 @@ class UserResource(ModelResource):
 
 
 class TaskResource(ModelResource):
+    """Task resource class."""
     user = fields.ForeignKey(UserResource, 'user')
 
     class Meta:
+        """Meta class."""
         
         queryset = Task.objects.all()
         resource_name = 'task'
@@ -133,10 +161,10 @@ class TaskResource(ModelResource):
             "title": ('exact', 'icontains',),
         }
         ordering = ['due_date']
-        # serializer = Serializer(formats=['json', ])
+        serializer = Serializer(formats=['json', ])
     
     def prepend_urls(self):
-        """Override urls for login signup and logout."""
+        """Override urls for geting tasks and task alerts."""
         print self._meta.resource_name
         return [
             url(r"^(?P<resource_name>%s)/get%s$" %
@@ -148,7 +176,19 @@ class TaskResource(ModelResource):
         ]
 
     def get_task(self, request, **kwargs):
-        """For getting tasks."""
+        """For getting tasks.
+
+        Input params:
+            (optional)
+            title(str): Title for searching tasks.
+            due_date(str): for filter tasks using due date.
+            offset(int): offset for the task list.
+            limit(int): limit for the task limit.
+        Response:
+            data(json): dictionary with,
+                objects: task details list. 
+                meta: pagination details.
+        """
         self.method_check(request, allowed=['get'])
 
         request_dict = {}
@@ -169,7 +209,13 @@ class TaskResource(ModelResource):
         return data
 
     def get_task_alert(self, request, **kwargs):
-        """For alerting tasks."""
+        """For task alerts.
+
+        Response:
+            data(json): dictionary with,
+                objects: task details list. 
+                meta: pagination details.
+        """
         self.method_check(request, allowed=['get'])
 
         request_dict = {}
@@ -189,13 +235,15 @@ class TaskResource(ModelResource):
 
 
 class SubTaskResource(ModelResource):
-	"""Sub Task resource class."""
+    """Sub Task resource class."""
 
-	task = fields.ForeignKey(TaskResource, 'task')
+    task = fields.ForeignKey(TaskResource, 'task')
 
-	class Meta:
-	        queryset = SubTask.objects.all()
-	        resource_name = 'subtask'
-	        authentication = Authentication()
-	        authorization = Authorization()
-	        serializer = Serializer(formats=['json', ])
+    class Meta:
+        """Meta class."""
+        
+        queryset = SubTask.objects.all()
+        resource_name = 'subtask'
+        authentication = Authentication()
+        authorization = Authorization()
+        serializer = Serializer(formats=['json', ])

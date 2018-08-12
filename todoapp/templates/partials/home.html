@@ -13,35 +13,33 @@
     padding: 2px 16px;
 }
 </style>
+
+<div>
+	<a ui-sref="login" style="float: right; font-size: 19px;">Log out</a>
+</div>
+
 <div class="row">
 <div class="col-md-8">
     <h3>Todo list</h3>
-    <button ng-click="addtodo()">Add</button>
+    <button ng-click="addtodo()">Add Task</button>
   <div>
   	<div>
 
-  		<input type="text" ng-model="search_title" ng-change="searchTask()" name="">
+  		<input type="text" ng-model="search_title" ng-change="searchTask()" name="" placeholder="Search Tasks" style="    float: right;">
 
   	</div>
-  	<!-- <table>
-  		<tr ng-repeat="task in task_data ">
-  			<td>{[{task.title}]}</td>
-  			<td>{[{task.description}]}</td>
-  			<td>{[{task.due_date}]}</td>
-  		</tr>
-  	</table> -->
   		<div class="card" ng-show="add">
   <div  class="container">
   	<input ng-model="title" type="text" name=""><br><br>
   	<input ng-model="description"  type="text" name=""><br><br>
   	<input ng-model="due_date"  type="date" name=""><br><br>
-  	<button ng-click="savetodo()">Save</button>
+  	<button ng-click="saveTask()">Save</button>
   </div>
 </div>
   	<div  class="card" ng-repeat="task in task_data " style="" >
 	  <div ng-hide="taskid==task.id" class="container">
-	  	<button ng-click="delete(task)">Delete</button>
-	  	<button ng-click="taskid=task.id">Edit</button>
+	  	<button ng-click="delete(task)">Delete Task</button>
+	  	<button ng-click="taskid=task.id">Edit Task</button>
 	    <h4><b>{[{task.title}]}</b></h4> 
 	    <p>{[{task.description}]}</p> 
 	    <p>{[{task.due_date}]}</p>
@@ -50,7 +48,7 @@
 	    	<button ng-click="addSubtask()">Add Subtask</button>
 	    	<div class="card" ng-show="addsub" >
 			  	<input ng-model="subdescription"  type="text" name=""><br><br>
-			  	<button ng-click="saveaddsub(task,subdescription)">Save</button>
+			  	<button ng-click="saveSubTask(task,subdescription)">Save Subtask</button>
 	    	</div>
 		    <div  class="card" ng-repeat="sub_task in task.sub_tasks " style="height: 7.5em;padding: 1em" >
 		    	<div ng-hide="subtaskid==sub_task.id">
@@ -64,7 +62,7 @@
 				<input ng-model="sub_task.description"  type="text" name=""><br><br>
 				<input type="radio" value="completed" ng-model="sub_task.status" name="sub_status">Completed<br>
 				<input type="radio" value="pendig" ng-model="sub_task.status" name="sub_status">Pending<br>
-			  	<button ng-click="saveeditedsub(sub_task)">Save</button>
+			  	<button ng-click="editSubTask(sub_task)">Save</button>
 			</div>
 		    </div>
 		</div>
@@ -77,7 +75,7 @@
 	  		<option value="completed">Completed</option>
 	  		<option value="pendig">Pending</option>
 	  	</select>
-	  	<button ng-click="saveeditedtodo(task)">Save</button>
+	  	<button ng-click="editTask(task)">Save</button>
 	  </div>
 </div>
 

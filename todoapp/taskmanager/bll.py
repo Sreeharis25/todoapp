@@ -23,7 +23,19 @@ from .constants import DUE_DATE_NEXT_WEEK
 
 
 def signup_user(user_dict):
-	"""For signinup user."""
+	"""For signinup user.
+
+	Input Params:
+        user_dict (dict): Dictionary with.
+        	username (str): username for the user
+        	password(password): password for the user.
+            first_name(str): First for the user.
+            email(email): Email id of the user
+    Returns:
+        user_data (dict): Dictionary with.
+        	success: bool value showing success msg.
+            user: User resource uri.
+	"""
 	if task_dal.filter_user_by_username(user_dict['username']).exists():
 		raise UsernameExists
 
@@ -38,7 +50,17 @@ def signup_user(user_dict):
 
 
 def login_user(user_dict):
-	"""For user login."""
+	"""For user login.
+
+	Input Params:
+        user_dict (dict): Dictionary with.
+        	username (str): username of the user
+        	password(password): password of the user.
+    Returns:
+        user_data (dict): Dictionary with.
+        	success: bool value showing success msg.
+            user: User resource uri.
+	"""
 	user = task_dal.get_user_by_username(user_dict['username'])
 
 	if user.check_password(user_dict['password']) is False:
@@ -57,7 +79,15 @@ def login_user(user_dict):
 
 
 def logout_user(user_dict):
-	"""For user logout."""
+	"""For user logout.
+
+	Input Params:
+        user_dict (dict): Dictionary with.
+        	request
+    Returns:
+        user_data (dict): Dictionary with.
+        	success: bool value showing success msg.
+	"""
 	if request.user and request.user.is_authenticated():
 	    logout(request)
 	    user_data =  {'success': True}
@@ -66,7 +96,19 @@ def logout_user(user_dict):
 
 
 def get_tasks(task_dict):
-	"""For getting tasks."""
+	"""For getting tasks.
+
+	Input Params:
+        task_dict (dict): Dictionary with.
+        	title(str): Title for searching tasks.
+            due_date(str): for filter tasks using due date.
+            offset(int): offset for the task list.
+            limit(int): limit for the task limit.
+    Returns:
+        task_dict (dict): Dictionary with.
+        	objects: Task details list
+        	meta: pagination data.
+	"""
 	task_dict = setup_task_query(task_dict)
 
 	task_dict['objects'] = task_dal.filter_task_by_query(task_dict['filter'])
@@ -83,7 +125,18 @@ def get_tasks(task_dict):
 
 
 def setup_task_query(task_dict):
-	"""For setting up task query."""
+	"""For setting up task query.
+
+	Input Params:
+        task_dict (dict): Dictionary with.
+        	title(str): Title for searching tasks.
+            due_date(str): for filter tasks using due date.
+            due_date__gte(str): 
+            	for filter tasks using due date greater than date.
+    Returns:
+        task_dict (dict): Dictionary with.
+        	collection objects
+	"""
 	task_dict['filter'] = Q()
 
 	if 'title' in task_dict.keys():
@@ -115,7 +168,14 @@ def setup_task_query(task_dict):
 
 
 def get_task_details(task):
-	"""For getting task details."""
+	"""For getting task details.
+
+	Input Params:
+        task (obj): Corresponding task objects
+    Returns:
+        task_details (dict): Dictionary with.
+        	task details
+	"""
 	try:
 		task_resource_uri = '/api/v1/task/' + str(task.id) + '/'
 		task_details = {
@@ -149,7 +209,15 @@ def get_task_details(task):
 
 
 def get_alert_needed_tasks(task_dict):
-	"""For getting alert needed tasks."""
+	"""For getting alert needed tasks.
+
+	Input Params:
+        task_dict (dict): Dictionary.
+    Returns:
+        task_dict (dict): Dictionary with.
+        	objects: Task details list
+        	meta: Pagination meta data.
+	"""
 	task_data = {}
 	task_data['objects'] = []
 

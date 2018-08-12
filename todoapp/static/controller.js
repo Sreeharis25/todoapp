@@ -9,13 +9,10 @@
       fromState,
       fromParams
     ) {
-      console.log("Changed state to: " + toState);
+      // console.log("Changed state to: " + toState);
     });
-
-    // if (!LoginService.isAuthenticated()) {
-    //   $state.transitionTo("login");
-    // }
   });
+
 // router
   app.config([
     "$stateProvider",
@@ -38,6 +35,7 @@
         });
     }
   ]);
+
 // loginctrl
   app.controller("LoginController", function(
     $scope,
@@ -46,37 +44,32 @@
     $state,
     LoginService
   ) {
-    $rootScope.title = "AngularJS Login Sample";
+    $rootScope.title = "User Login";
+    $scope.alert = false;
 
     $scope.formSubmit = function() {
-      // if (LoginService.login($scope.username, $scope.password)) {
-      //   $scope.error = "";
-      //   $scope.username = "";
-      //   $scope.password = "";
-      //   $state.transitionTo("home");
-
-      //   LoginService.login()
-      // } else {
-      //   $scope.error = "Incorrect username/password !";
-      // }
-      //  if () {
-      //     $state.transitionTo("home");
-      //  } else {
-      //   $scope.error = "Incorrect username/password !";
-      // }
       LoginService.login($scope.username, $scope.password).success(function(data,status){
-        console.log(status)
+        
         LoginService.setLocalStorage("username", $scope.username);
         LoginService.setLocalStorage("password", $scope.password);
         LoginService.setLocalStorage("user", data.user);
-        console.log(LoginService.getLocalStorage("password"))
+        
           $state.transitionTo("home");
       })
       .error(function(data,status){
-        console.log(status)
+        
+        
+        if (status == 401){
+          alert(data.error_message);
+        }
+        else{
+          alert("Something went wrong");
+        }
+
       });
     };
   });
+
 // homectrl
   app.controller("HomeController", function(
     $scope,
@@ -88,7 +81,7 @@
   ) {
     $scope.add=false;
     $scope.addsub=false;
-    $rootScope.title = "AngularJS Login Sample";
+    $rootScope.title = "Todo";
     $scope.subdescription="";
     $scope.title="";
     $scope.description="";
@@ -98,37 +91,33 @@
     $scope.search_title='';
     $scope.loadTasks = function() {
       HomeService.load_tasks().success(function(data,status){
-        console.log(status)
-        // $scope.task_data = [];
-        console.log(data)
         $rootScope.task_data = data.objects;
         angular.forEach($rootScope.task_data,function(value, key) {
           value.due_date=$filter('date')(value.due_date, "dd/MM/yyyy");
         })
-        // $scope.formattedDate =   $filter('date')($scope.currDate, "dd-MM-yyyy");
-        console.log(data.objects);
-        // $scope.task_data.push.apply($scope.task_data,data.objects);
-          // $state.transitionTo("home");
       })
       .error(function(data,status){
-        console.log(status)
+        if (status == 500){
+          alert("Something went wrong"); 
+        }
+        else{
+          alert(data.error_message);
+        }
       });
     };
 
 
      $scope.searchTask = function() {
-      console.log($scope.search_title)
       HomeService.search__tasks($scope.search_title).success(function(data,status){
-        console.log(status)
-        // $scope.task_data = [];
-        console.log(data)
         $rootScope.task_data = data.objects;
-        console.log(data.objects);
-        // $scope.task_data.push.apply($scope.task_data,data.objects);
-          // $state.transitionTo("home");
       })
       .error(function(data,status){
-        console.log(status)
+        if (status == 500){
+          alert("Something went wrong"); 
+        }
+        else{
+          alert(data.error_message);
+        }
       });
     };
 
@@ -137,114 +126,131 @@
     $scope.delete = function(task){
       
       HomeService.delete_tasks(task).success(function(data,status){
-        console.log(status)
         $state.reload();
-        // $scope.task_data = [];
-        // console.log(data)
-        // $rootScope.task_data = data.objects;
-        // console.log(data.objects);
-        // $scope.task_data.push.apply($scope.task_data,data.objects);
-          // $state.transitionTo("home");
       })
       .error(function(data,status){
-        console.log(status)
+        if (status == 500){
+          alert("Something went wrong"); 
+        }
+        else{
+          alert(data.error_message);
+        }
       });
-    }
+    };
+
     $scope.deleteSub = function(subtask){
       
       HomeService.delete_tasks(subtask).success(function(data,status){
-        console.log(status)
+        
         $state.reload();
-        // $scope.task_data = [];
-        // console.log(data)
-        // $rootScope.task_data = data.objects;
-        // console.log(data.objects);
-        // $scope.task_data.push.apply($scope.task_data,data.objects);
-          // $state.transitionTo("home");
       })
       .error(function(data,status){
-        console.log(status)
+        
+        if (status == 500){
+          alert("Something went wrong"); 
+        }
+        else{
+          alert(data.error_message);
+        }
       });
-    }
+    };
+
     $scope.addtodo = function(){
       $scope.add=true;
     };
+
     $scope.addSubtask = function(){
       $scope.addsub=true;
-    }
-    $scope.saveaddsub = function(task,subdescription){
+    };
+
+    $scope.saveSubTask = function(task,subdescription){
       var data = {};
       data.description=subdescription;
-      console.log($scope.subdescription)
+      
       data.task=task.resource_uri;
       HomeService.add_subtasks(data).success(function(data,status){
-        console.log(status)
+        
         $state.reload();
-        // $scope.task_data = [];
-        // console.log(data)
-        // $rootScope.task_data = data.objects;
-        // console.log(data.objects);
-        // $scope.task_data.push.apply($scope.task_data,data.objects);
-          // $state.transitionTo("home");
       })
       .error(function(data,status){
-        console.log(status)
+        
+        if (status == 500){
+          alert("Something went wrong"); 
+        }
+        else{
+          alert(data.error_message);
+        }
       });
-    }
-    $scope.savetodo = function(){
+    };
+
+    $scope.saveTask = function(){
       var data={};
       data.title=$scope.title;
       data.description= $scope.description;
       data.due_date=$scope.due_date;
       data.user = LoginService.getLocalStorage('user')
       HomeService.add_tasks(data).success(function(data,status){
-        console.log(status)
+        
         $state.reload();
-        // $scope.task_data = [];
-        // console.log(data)
-        // $rootScope.task_data = data.objects;
-        // console.log(data.objects);
-        // $scope.task_data.push.apply($scope.task_data,data.objects);
-          // $state.transitionTo("home");
       })
       .error(function(data,status){
-        console.log(status)
+        
+        if (status == 500){
+          alert("Something went wrong"); 
+        }
+        else{
+          alert(data.error_message);
+        }
       });
     };
-    $scope.saveeditedtodo = function(task){
-      
+
+    $scope.editTask = function(task){
       HomeService.edit_tasks(task).success(function(data,status){
-        console.log(status)
+        
         $state.reload();
         
       })
       .error(function(data,status){
-        console.log(status)
+        
+        if (status == 500){
+          alert("Something went wrong"); 
+        }
+        else{
+          alert(data.error_message);
+        }
       });
     };
-    $scope.saveeditedsub = function(subtask){
+
+    $scope.editSubTask = function(subtask){
       HomeService.edit_subtasks(subtask).success(function(data,status){
-        console.log(status)
+        
         $state.reload();
         
       })
       .error(function(data,status){
-        console.log(status)
+        
+        if (status == 500){
+          alert("Something went wrong"); 
+        }
+        else{
+          alert(data.error_message);
+        }
       });
-    }
+    };
 
     $scope.loadTaskAlerts = function() {
       HomeService.load_task_alerts().success(function(data,status){
-        console.log(status)
-        console.log(data)
         $rootScope.task_alert_data = data.objects;
-        // angular.forEach($rootScope.task_data,function(value, key) {
-        //   value.due_date=$filter('date')(value.due_date, "dd/MM/yyyy");
-        // })
-        console.log(data.objects);
+        
       })
       .error(function(data,status){
-        console.log(status)
+        
+        if (status == 500){
+          alert("Something went wrong"); 
+        }
+        else{
+          alert(data.error_message);
+        }
       });
     };
 
@@ -339,19 +345,11 @@
        },
 
       login: function(username, password) {
-        // isAuthenticated = username === admin && password === pass;
-        // return isAuthenticated;
         var loginDetails={};
         loginDetails.username=username;
         loginDetails.password=password;
-        console.log(rootUrl);
+        
         return $http.post('/api/v1/user/login/', loginDetails);
-        // return $http.get(rootUrl + '/organic-product-order/', {headers: headers,
-        //     params: {
-        //         customer: customer,
-        //         cycle:cycleId
-        //     }
-        // });
       },
 
       getLocalStorage: function(key){
@@ -379,103 +377,53 @@
 
     return {
       load_tasks: function() {
-        // var loginDetails={};
-        // loginDetails.username=username;
-        // loginDetails.password=password;
-        console.log(rootUrl);
+        
         headers = {"Authorization": "Basic" + AuthService.create_auth()};
-        console.log('headers', headers);
+        
         return $http.get('/api/v1/task/get/', {headers: headers});
-        // return $http.get(rootUrl + '/organic-product-order/', {headers: headers,
-        //     params: {
-        //         customer: customer,
-        //         cycle:cycleId
-        //     }
-        // });
       },
+
       add_tasks: function(data) {
-        // var loginDetails={};
-        // loginDetails.username=username;
-        // loginDetails.password=password;
         headers = {"Authorization": "Basic" + AuthService.create_auth()};
-        console.log('headers', headers);
+        
         return $http.post('/api/v1/task/', data);
-        // return $http.get(rootUrl + '/organic-product-order/', {headers: headers,
-        //     params: {
-        //         customer: customer,
-        //         cycle:cycleId
-        //     }
-        // });
       },
 
       search__tasks: function(data) {
-        // var loginDetails={};
-        console.log(data)
-        // loginDetails.username=username;
-        // loginDetails.password=password;
+        
         headers = {"Authorization": "Basic" + AuthService.create_auth()};
-        console.log('headers', headers);
+        
         return $http.get('/api/v1/task/get/?title='+data);
-        // return $http.get(rootUrl + '/organic-product-order/', {headers: headers,
-        //     params: {
-        //         customer: customer,
-        //         cycle:cycleId
-        //     }
-        // });
       },
 
       add_subtasks: function(data) {
-        // var loginDetails={};
-        // loginDetails.username=username;
-        // loginDetails.password=password;
         headers = {"Authorization": "Basic" + AuthService.create_auth()};
-        console.log('headers', headers);
+        
         return $http.post('/api/v1/subtask/', data);
-        // return $http.get(rootUrl + '/organic-product-order/', {headers: headers,
-        //     params: {
-        //         customer: customer,
-        //         cycle:cycleId
-        //     }
-        // });
       },
+
       edit_tasks: function(data) {
-        // var loginDetails={};
-        // loginDetails.username=username;
-        // loginDetails.password=password;
         headers = {"Authorization": "Basic" + AuthService.create_auth()};
-        console.log('headers', headers);
+        
         return $http.put(data.resource_uri, data);
-        // return $http.get(rootUrl + '/organic-product-order/', {headers: headers,
-        //     params: {
-        //         customer: customer,
-        //         cycle:cycleId
-        //     }
-        // });
       },
+
       edit_subtasks: function(data) {
-        // var loginDetails={};
-        // loginDetails.username=username;
-        // loginDetails.password=password;
         headers = {"Authorization": "Basic" + AuthService.create_auth()};
-        console.log('headers', headers);
+        
         return $http.put(data.resource_uri, data);
-        // return $http.get(rootUrl + '/organic-product-order/', {headers: headers,
-        //     params: {
-        //         customer: customer,
-        //         cycle:cycleId
-        //     }
-        // });
       },
+
       delete_tasks: function(data) {
         headers = {"Authorization": "Basic" + AuthService.create_auth()};
-        console.log('headers', headers);
+        
         return $http.delete(data.resource_uri, data);
       },
 
       load_task_alerts: function() {
-        console.log(rootUrl);
+        
         headers = {"Authorization": "Basic" + AuthService.create_auth()};
-        console.log('headers', headers);
+        
         return $http.get('/api/v1/task/alert/get/', {headers: headers});
       },
 
