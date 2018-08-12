@@ -30,9 +30,9 @@
   	</div>
   		<div class="card" ng-show="add">
   <div  class="container">
-  	<input ng-model="title" type="text" name=""><br><br>
-  	<input ng-model="description"  type="text" name=""><br><br>
-  	<input ng-model="due_date"  type="date" name=""><br><br>
+  	<input ng-model="title" type="text" name="" placeholder="Task title"><br><br>
+  	<input ng-model="description"  type="text" name="" placeholder="description"><br><br>
+  	<input ng-model="due_date"  type="date" name="" placeholder="Due date"><br><br>
   	<button ng-click="saveTask()">Save</button>
   </div>
 </div>
@@ -48,7 +48,7 @@
 	    <div class="col-md-9">
 	    	<button ng-click="addSubtask()">Add Subtask</button>
 	    	<div class="card" ng-show="addsub" >
-			  	<input ng-model="subdescription"  type="text" name=""><br><br>
+			  	<input ng-model="subdescription"  type="text" name="" placeholder="description"><br><br>
 			  	<button ng-click="saveSubTask(task,subdescription)">Save Subtask</button>
 	    	</div>
 		    <div  class="card" ng-repeat="sub_task in task.sub_tasks " style="height: 7.5em;padding: 1em" >
@@ -60,7 +60,7 @@
 			</div>
 			<br>
 			<div ng-show="subtaskid==sub_task.id">
-				<input ng-model="sub_task.description"  type="text" name=""><br><br>
+				<input ng-model="sub_task.description"  type="text" name="" placeholder="description"><br><br>
 				<input type="radio" value="completed" ng-model="sub_task.status" name="sub_status">Completed<br>
 				<input type="radio" value="pendig" ng-model="sub_task.status" name="sub_status">Pending<br>
 			  	<button ng-click="editSubTask(sub_task)">Save</button>
@@ -69,8 +69,8 @@
 		</div>
 	  </div>
 	  <div ng-show="taskid==task.id" class="container">
-	  	<input ng-model="task.title" type="text" name=""><br><br>
-	  	<input ng-model="task.description"  type="text" name=""><br><br>
+	  	<input ng-model="task.title" type="text" name="" placeholder="Task title"><br><br>
+	  	<input ng-model="task.description"  type="text" name="" placeholder="description"><br><br>
 	  	<input ng-model="task.due_date"  type="date" name=""><br><br>
 	  	<input ng-model="task.alert_hour"  type="number" name="" placeholder="Enter hours to get alert"><br><br>
 	  	<select ng-model="task.status">

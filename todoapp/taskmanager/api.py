@@ -1,16 +1,14 @@
 """Apis using tastypie for task manager app.."""
 from django.contrib.auth.models import User
 from django.conf.urls import url
-from django.http import HttpResponse
 
-from json import loads, dumps
+from json import loads
 
 from tastypie.resources import ModelResource
 from tastypie.authentication import BasicAuthentication, Authentication
 from tastypie.authorization import Authorization
 from tastypie.serializers import Serializer
 from tastypie import fields
-from tastypie.http import HttpUnauthorized, HttpForbidden
 from tastypie.utils import trailing_slash
 
 import utilities
@@ -48,7 +46,7 @@ class UserResource(ModelResource):
     def prepend_urls(self):
         """Override urls for user login, signup and logout."""
         return [
-        	url(r"^(?P<resource_name>%s)/signup%s$" %
+            url(r"^(?P<resource_name>%s)/signup%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('signup'), name="api_signup"),
             url(r"^(?P<resource_name>%s)/login%s$" %
@@ -72,7 +70,7 @@ class UserResource(ModelResource):
                 success: bool value showing success msg.
                 user: User resource uri.
         """
-    	self.method_check(request, allowed=['post'])
+        self.method_check(request, allowed=['post'])
 
         request_dict = {}
         try:
@@ -85,12 +83,11 @@ class UserResource(ModelResource):
             user_data = task_bll.signup_user(user_dict)
             data = success_response(user_data)
         except(
-            KeyError, ValueError, InvalidUserParameters, 
+            KeyError, ValueError, InvalidUserParameters,
                 UsernameExists) as e:
             data = error_response(e)
 
         return data
-	    	
 
     def login(self, request, **kwargs):
         """For user login.
@@ -116,7 +113,7 @@ class UserResource(ModelResource):
             user_data = task_bll.login_user(user_dict)
             data = success_response(user_data)
         except(
-            KeyError, ValueError, UnauthorizedUsername, 
+            KeyError, ValueError, UnauthorizedUsername,
                 UnauthorizedPassword, UserNotActive) as e:
             data = error_response(e)
 
@@ -124,7 +121,7 @@ class UserResource(ModelResource):
 
     def logout(self, request, **kwargs):
         """For logout.
-        
+
         Input:
             request
         Response:
@@ -150,7 +147,7 @@ class TaskResource(ModelResource):
 
     class Meta:
         """Meta class."""
-        
+
         queryset = Task.objects.all()
         resource_name = 'task'
         list_allowed_methods = ['get', 'post', 'put']
@@ -162,7 +159,7 @@ class TaskResource(ModelResource):
         }
         ordering = ['due_date']
         serializer = Serializer(formats=['json', ])
-    
+
     def prepend_urls(self):
         """Override urls for geting tasks and task alerts."""
         print self._meta.resource_name
@@ -186,7 +183,7 @@ class TaskResource(ModelResource):
             limit(int): limit for the task limit.
         Response:
             data(json): dictionary with,
-                objects: task details list. 
+                objects: task details list.
                 meta: pagination details.
         """
         self.method_check(request, allowed=['get'])
@@ -202,7 +199,7 @@ class TaskResource(ModelResource):
             task_data = task_bll.get_tasks(task_dict)
             data = success_response(task_data)
         except(
-            KeyError, ValueError, InvalidTaskParameters, 
+            KeyError, ValueError, InvalidTaskParameters,
                 InvalidSubTaskParameters, InvalidDueDate) as e:
             data = error_response(e)
 
@@ -213,7 +210,7 @@ class TaskResource(ModelResource):
 
         Response:
             data(json): dictionary with,
-                objects: task details list. 
+                objects: task details list.
                 meta: pagination details.
         """
         self.method_check(request, allowed=['get'])
@@ -226,12 +223,11 @@ class TaskResource(ModelResource):
             task_data = task_bll.get_alert_needed_tasks(task_dict)
             data = success_response(task_data)
         except(
-            KeyError, ValueError, InvalidTaskParameters, 
+            KeyError, ValueError, InvalidTaskParameters,
                 InvalidSubTaskParameters) as e:
             data = error_response(e)
 
         return data
-
 
 
 class SubTaskResource(ModelResource):
@@ -241,7 +237,7 @@ class SubTaskResource(ModelResource):
 
     class Meta:
         """Meta class."""
-        
+
         queryset = SubTask.objects.all()
         resource_name = 'subtask'
         authentication = Authentication()

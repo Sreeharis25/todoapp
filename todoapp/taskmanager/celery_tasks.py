@@ -1,6 +1,5 @@
 """For managing celery tasks for todoapp."""
 from __future__ import absolute_import
-from todoapp.celery import app
 
 from celery.task.schedules import crontab
 from celery.decorators import periodic_task
@@ -24,5 +23,5 @@ def delete_task():
     tasks = Task.objects.filter(
         status=STATUS_TYPE_COMPLETED, due_date__lte=previous_month_date)
     tasks.delete()
-        
+
     print 'Sucess'

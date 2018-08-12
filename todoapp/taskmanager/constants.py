@@ -7,8 +7,8 @@ STATUS_TYPE_PENDING = 'pending'
 STATUS_TYPE_COMPLETED = 'completed'
 
 STATUS_TYPE_CHOICES = (
-	(STATUS_TYPE_PENDING, 'Pending'),
-	(STATUS_TYPE_COMPLETED, 'Completed'))
+    (STATUS_TYPE_PENDING, 'Pending'),
+    (STATUS_TYPE_COMPLETED, 'Completed'))
 
 DUE_DATE_TODAY = 'today'
 DUE_DATE_THIS_WEEK = 'this_week'

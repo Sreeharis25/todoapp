@@ -13,7 +13,8 @@ def create_task():
     Create a task with the given `title`, description and due_date.
     """
     Task.objects.create(
-    	title='Task1', description='Description 1', due_date='2018-08-01')
+        title='Task1', description='Description 1',
+        due_date='2018-08-01')
 
 
 def get_task_by_id():
@@ -23,7 +24,6 @@ def get_task_by_id():
     return Task.objects.get(id=id)
 
 
-
 @pytest.mark.django_db
 def create_sub_task():
     """
@@ -31,7 +31,7 @@ def create_sub_task():
     """
     task = get_task_by_id(1)
     SubTask.objects.create(
-    	title='title', description='description', task=task)
+        title='title', description='description', task=task)
 
 
 @pytest.mark.django_db
