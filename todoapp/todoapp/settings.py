@@ -26,7 +26,7 @@ SECRET_KEY = 't&ftcw*x$2k+=9l&v(0pz-y@wh&)f0uf@b4gzcbc5oaz=ti@=)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'letztodo.herokuapp.com']
 
 ROOT_URL = 'http://127.0.0.1:8000' 
 
@@ -143,7 +143,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+# for heroku storages
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
