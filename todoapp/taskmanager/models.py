@@ -28,11 +28,10 @@ class SubTask(models.Model):
     """Class representing sub task data."""
 
     task = models.ForeignKey(Task)
-    title = models.CharField(max_length=100, default='')
     description = models.TextField(default='')
     status = models.CharField(
         max_length=20, default='', choices=STATUS_TYPE_CHOICES)
 
     def __unicode__(self):
         """For representing the object in unicode."""
-        return (self.task.title) + ' - ' + (self.title)
+        return (self.task.title) + ' - ' + (self.description)
