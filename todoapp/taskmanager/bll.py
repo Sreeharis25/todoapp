@@ -21,6 +21,7 @@ from .constants import DUE_DATE_TODAY
 from .constants import DUE_DATE_OVERDUE
 from .constants import DUE_DATE_THIS_WEEK
 from .constants import DUE_DATE_NEXT_WEEK
+from .constants import DUE_DATE_THIS_MONTH
 
 
 def signup_user(user_dict):
@@ -159,12 +160,20 @@ def setup_task_query(task_dict):
             week_start = current_date + timedelta(days_ahead)
             week_end = week_start + timedelta(7)
             task_dict['filter'] &= (Q(due_date__range=[week_start, week_end]))
+        elif task_dict['due_date'] == DUE_DATE_THIS_MONTH:
+            current_month = current_date.month
+            current_year = current_date.year
+            task_dict['filter'] &= (
+                Q(due_date__month=current_month) & Q(
+                    due_date__year=current_year))
         elif task_dict['due_date'] == DUE_DATE_OVERDUE:
             task_dict['filter'] &= (Q(due_date__lte=current_date))
         else:
             raise InvalidDueDate
     if 'due_date__gte' in task_dict.keys():
         task_dict['filter'] &= (Q(due_date__gte=task_dict['due_date__gte']))
+    if 'date' in task_dict.keys():
+        task_dict['filter'] &= (Q(due_date=task_dict['date']))
 
     utilities.setup_default_meta_data(task_dict)
 

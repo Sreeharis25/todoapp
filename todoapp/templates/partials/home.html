@@ -21,13 +21,30 @@
 <div class="row">
 <div class="col-md-8">
     <h3>Todo list</h3>
-    <button ng-click="addtodo()">Add Task</button>
   <div>
   	<div>
-
-  		<input type="text" ng-model="search_title" ng-change="searchTask()" name="" placeholder="Search Tasks" style="    float: right;">
+  		<div>
+	  		<input type="text" ng-model="search_title" ng-change="searchTask()" name="" placeholder="Search Tasks" style="    float: right;" />
+	  	</div>
+  		<div style="float: right;">
+  			Search by Date:
+  			<input type="date" ng-model="search_date" ng-change="searchTask()" name="" placeholder="Search Task by date">
+  		</div>
+  		<div style="float: right;">
+  			Search task by due date manner:
+  			<select ng-model="due_date_value" ng-change="searchTask()">
+		  		<option value="today">Today</option>
+		  		<option value="this_week">This Week</option>
+		  		<option value="next_week">Next Week</option>
+		  		<option value="overdue">Overdue</option>
+		  		<option value="this_month">This Month</option>
+		  	</select>
+  		</div>
 
   	</div>
+
+  	<button ng-click="addtodo()">Add Task</button>
+
   		<div class="card" ng-show="add">
   <div  class="container">
   	<input ng-model="title" type="text" name="" placeholder="Task title"><br><br>

@@ -193,7 +193,9 @@ class TaskResource(ModelResource):
             request_dict['received_data'] = request.GET
             request_dict['optional_params'] = [
                 ('title', 'str'), ('due_date', 'str'),
-                ('offset', 'int'), ('limit', 'int')]
+                ('offset', 'int'), ('limit', 'int'),
+                ('date', 'str')]
+            print request_dict['optional_params']
             task_dict = utilities.fetch_request_params(request_dict)
 
             task_data = task_bll.get_tasks(task_dict)

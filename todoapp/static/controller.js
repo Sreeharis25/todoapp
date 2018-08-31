@@ -28,6 +28,11 @@
           templateUrl: "partials/login.html",
           controller: "LoginController"
         })
+        .state("signup", {
+          url: "/signup",
+          templateUrl: "partials/signup.html",
+          controller: "LoginController"
+        })
         .state("home", {
           url: "/home",
           templateUrl: "partials/home.html",
@@ -68,6 +73,29 @@
 
       });
     };
+
+    $scope.formSignup = function() {
+      LoginService.signup($scope.username, $scope.password, $scope.first_name, $scope.email).success(function(data,status){
+        
+        LoginService.setLocalStorage("username", $scope.username);
+        LoginService.setLocalStorage("password", $scope.password);
+        LoginService.setLocalStorage("user", data.user);
+        
+          $state.transitionTo("home");
+      })
+      .error(function(data,status){
+        
+        
+        if (status == 401){
+          alert(data.error_message);
+        }
+        else{
+          alert("Something went wrong");
+        }
+
+      });
+    };
+
   });
 
 // homectrl
@@ -90,6 +118,8 @@
     $scope.alert_hour=0;
     $scope.subtaskid=0;
     $scope.search_title='';
+    $scope.due_date_value='';
+    $scope.search_date='';
     $scope.loadTasks = function() {
       HomeService.load_tasks().success(function(data,status){
         $rootScope.task_data = data.objects;
@@ -109,7 +139,28 @@
 
 
      $scope.searchTask = function() {
-      HomeService.search__tasks($scope.search_title).success(function(data,status){
+      search_duedate=$filter('date')($scope.search_date, "yyyy-MM-dd");
+      console.log(search_duedate);
+      console.log($scope.due_date_value);
+      if (search_duedate == null)
+      {
+        search_duedate = ""
+      }
+      HomeService.search__tasks($scope.search_title, search_duedate, $scope.due_date_value).success(function(data,status){
+        $rootScope.task_data = data.objects;
+      })
+      .error(function(data,status){
+        if (status == 500){
+          alert("Something went wrong"); 
+        }
+        else{
+          alert(data.error_message);
+        }
+      });
+    };
+
+    $scope.searchDate = function() {
+      HomeService.search_date($scope.search_date).success(function(data,status){
         $rootScope.task_data = data.objects;
       })
       .error(function(data,status){
@@ -353,6 +404,16 @@
         return $http.post('/api/v1/user/login/', loginDetails);
       },
 
+      signup: function(username, password, first_name, email) {
+        var loginDetails={};
+        loginDetails.username=username;
+        loginDetails.password=password;
+        loginDetails.first_name=first_name;
+        loginDetails.email=email;
+        
+        return $http.post('/api/v1/user/signup/', loginDetails);
+      },
+
       getLocalStorage: function(key){
         var item = localStorage.getItem(key);
         data = JSON.parse(item);
@@ -390,11 +451,11 @@
         return $http.post('/api/v1/task/', data);
       },
 
-      search__tasks: function(data) {
+      search__tasks: function(title, date, due_date_value) {
         
         headers = {"Authorization": "Basic" + AuthService.create_auth()};
         
-        return $http.get('/api/v1/task/get/?title='+data);
+        return $http.get('/api/v1/task/get/?title='+title +'&date=' + date+'&due_date=' + due_date_value);
       },
 
       add_subtasks: function(data) {

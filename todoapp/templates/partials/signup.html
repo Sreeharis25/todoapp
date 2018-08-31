@@ -1,9 +1,7 @@
  <div class="col-md-12">
-      <h3>Login Page</h3>
+      <h3>Signup Page</h3>
 
-      <a ui-sref="signup" style="float: right; font-size: 19px;">New User!</a>
-
-      <form ng-submit="formSubmit()" class="form">
+      <form ng-submit="formSignup()" class="form">
         <div class="col-md-4">
           <div class="form-group">
             <input type="text" class="form-control" ng-model="username" placeholder="username" required="" />
@@ -14,7 +12,15 @@
           </div>
 
           <div class="form-group">
-            <button type="submit" class="btn btn-success">Login</button>
+            <input type="text" class="form-control" ng-model="first_name" placeholder="first name" required="" />
+          </div>
+
+          <div class="form-group">
+            <input type="email" class="form-control" ng-model="email" placeholder="email" required="" />
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">Sign Up</button>
             <span class="text-danger">{{ error }}</span>
           </div>
 
