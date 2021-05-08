@@ -9,7 +9,7 @@ Django==1.11
 django-cors-headers==2.4.0
 django-tastypie==0.14.1
 dj-database-url==0.4.1
-eventlet==0.19.0
+eventlet==0.31.0
 funcsigs==1.0.2
 greenlet==0.4.10
 gunicorn==19.6.0
