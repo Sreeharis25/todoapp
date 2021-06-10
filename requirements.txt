@@ -5,7 +5,7 @@ billiard==3.5.0.4
 celery==4.2.1
 certifi==2018.4.16
 chardet==3.0.4
-Django==1.11
+Django==2.2.24
 django-cors-headers==2.4.0
 django-tastypie==0.14.1
 dj-database-url==0.4.1
